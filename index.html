@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>商品管理</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+  <h1>商品一覧</h1>
+  <div id="product-list"></div>
+
+  <script>
+    const supabase = supabase.createClient('https://rpijrqrvufmfanrkefsm.supabase.co', 'public-anon-key');
+
+    async function loadProducts() {
+      const { data: user } = await supabase.auth.getUser();
+      if (!user) {
+        alert("ログインしてください");
+        return;
+      }
+      const res = await fetch(`/products_and_user_ids?user_id=${user.id}`);
+      const products = await res.json();
+      const container = document.getElementById("product-list");
+      container.innerHTML = products.map(p => `<div>${p.name} (${p.stock}個)</div>`).join("");
+    }
+
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        loadProducts();
+      }
+    });
+
+    supabase.auth.signInWithPassword({
+      email: 'test@example.com',
+      password: 'password123'
+    });
+
+    const { data, error } = await supabase.auth.signUp({
+      email: 'user@example.com',
+      password: 'password123'
+    });
+  </script>
+</body>
+</html>
