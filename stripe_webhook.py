@@ -1,7 +1,7 @@
 from fastapi import Request
 import stripe
 import os
-from supabase_client import supabase
+import supabase_client
 import json
 
 async def stripe_webhook(request: Request):
@@ -21,10 +21,6 @@ async def stripe_webhook(request: Request):
         customer_id = session["customer"]
         user_id = session["metadata"]["user_id"]
 
-        supabase.table("users").update({
-            "stripe_customer_id": customer_id,
-            "subscription_status": "active",
-            "plan": "basic"
-        }).eq("id", user_id).execute()
+        supabase_client.update_product_by_name(customer_id, {}, "users")
 
     return {"status": "success"}
