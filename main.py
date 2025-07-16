@@ -1,7 +1,6 @@
 from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from stripe_webhook import stripe_webhook
-from supabase_client import supabase
 from authen import sign_up, login, get_current_user
 import stripe
 import os
