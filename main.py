@@ -8,6 +8,7 @@ from stripe_webhook import stripe_webhook
 from authen import sign_up, login, get_current_user
 import supabase_client
 import stripe
+import uvicorn
 import os
 import json
 
@@ -90,7 +91,7 @@ async def create_checkout_session(request: Request, user=Depends(get_current_use
 
     app.post("/stripe-webhook")(stripe_webhook)
 
-# デバッグ
+# 起動
 if __name__ == '__main__':
-    import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    port=os.getenv("PORT")
+    uvicorn.run("main:app", host="127.0.0.1", port=8080, reload=True)
