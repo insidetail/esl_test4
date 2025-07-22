@@ -91,7 +91,9 @@ async def create_checkout_session(request: Request, user=Depends(get_current_use
 
     app.post("/stripe-webhook")(stripe_webhook)
 
-# 起動
-if __name__ == '__main__':
-    port=os.getenv("PORT")
-    uvicorn.run("main:app", host="127.0.0.1", port=8080, reload=True)
+# # 起動(デバッグ用)
+# if __name__ == '__main__':
+#     port=os.getenv("PORT")
+#     uvicorn.run("main:app", host="127.0.0.1", port=8080, reload=True)
+
+app = FastAPI()
