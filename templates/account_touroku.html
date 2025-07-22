@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ダイナミックプライシング-アカウント登録</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+
+    <h1>新規登録</h1>
+    <form id="user_info_form">
+        <input type="email" id="email" placeholder="Email"><br>
+        <input type="password" id="password" placeholder="Password"><br>
+        <button type="submit">登録</button>
+    </form>
+
+    <script>
+        　　document.getElementById("user_info_form").addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          const res = await fetch("/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
+
+          const data = await res.json();
+          if (data.user) {
+            alert("登録成功！ログインしてください。");
+            window.location.href = "/";  // ログイン画面に戻る
+          } else {
+            alert("登録失敗: " + (data.error?.message || "不明なエラー"));
+          }
+        });
+    </script>
+
+</body>
+</html>

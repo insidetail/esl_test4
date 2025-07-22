@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ダイナミックプライシング</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+
+    <h1>ログインまたは新規登録</h1>
+    <form id="login-form">
+      <input type="email" id="email" placeholder="Email"><br>
+      <input type="password" id="password" placeholder="Password"><br>
+      <button type="submit">ログイン</button>
+    </form>
+
+    <div id="user_touroku">
+        <a id="touroku_form_link" href="/account_touroku">
+            <span>アカウントをお持ちでない方はこちら</span>
+        </a>
+    </div>
+
+    <script>
+        document.getElementById("login-form").addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          const res = await fetch("/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
+
+          const data = await res.json();
+          if (data.access_token) {
+            alert("ログイン成功！\nアクセストークン: " + data.access_token);
+            localStorage.setItem("token", data.access_token); // supabaseデータベース操作で使用するtoken
+            window.location.href = "/show_main_menu";   // main.pyに定義した@のところ
+          } else {
+            alert("ログイン失敗");
+          }
+        });
+    </script>
+
+</body>
+</html>

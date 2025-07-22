@@ -5,8 +5,8 @@ import os
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
 
-def sign_up(request: Request):
-    body = request.json()
+async def sign_up(request: Request):
+    body = await request.json()
     email = body['email']
     password = body['password']
 
@@ -28,8 +28,8 @@ def sign_up(request: Request):
 
     return res.json()
 
-def login(request: Request):
-    body = request.json()
+async def login(request: Request):
+    body = await request.json()
     email = body['email']
     password = body['password']
 

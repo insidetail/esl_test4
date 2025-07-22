@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ダイナミックプライシング-商品管理</title>
+  <meta charset="UTF-8">
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 8px;
+    }
+    th {
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>商品一覧</h1>
+  <table id="product-table">
+    <thead>
+      <tr>
+        <th>商品ID</th>
+        <th>商品名</th>
+        <th>在庫数</th>
+        <th>販売価格</th>
+        <th>仕入価格</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const token = localStorage.getItem("token");
+    console.log('start')
+    fetch("/get_users_products", {
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    })
+    .then(res => res.json())  // =>の前が直前のやつの戻り値
+    .then(data => {
+      console.log(data)
+      const tbody = document.querySelector("#product-table tbody");
+      data.products.forEach(p => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${p.product_code}</td>
+          <td>${p.name}</td>
+          <td>${p.stock}</td>
+          <td>${p.sale_price}</td>
+          <td>${p.purchase_price}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      alert("商品取得に失敗しました");
+    });
+  </script>
+
+</body>
+</html>
